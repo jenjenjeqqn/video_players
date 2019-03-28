@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>功能选择</title>
+        <link rel="stylesheet" href="main.css">
+        <link rel="stylesheet" type="text/css" href="font-awesome-4.7.0/css/font-awesome.min.css">
+        <script type="text/javascript" src="main.js"></script>
+        <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
+    </head>
+
+    <body>
+        <div class="header">
+            <div  class="col3" id="col3-1">
+                <i class="fa fa-calendar-check-o"></i> <span>日程管理系统</span>
+            </div>
+            <div class="col3" id="col3-2">
+                <ul>
+                    <li><a href="#">应用介绍</a></li>
+                    <li><a href="persona.html">解决方案</a></li>
+                    <li><a href="notes.html">支持与下载</a></li>
+                    <li><a href="sign_in.html">更多</a></li>
+                </ul>
+            </div>  
+            <div class="col3" id="col3-3">
+                <a href="#"><i class="fa fa-search"></i></a>
+                <a href="#"><i class="fa fa-user-o"></i></a>
+                <a id="more"><i class="fa fa-th"></i></a>
+            </div>
+        </div>
+
+        <div class="mainbody">
+            <div class="hid-menu">
+                <ul>
+                    <li>查询</li>
+                    <li>下载</li>
+                    <li>帮助中心</li>
+                    <li>更多</li>
+                </ul>
+            </div>
+
+            <div class="container">
+                <div class="cell"><a href="#">日程查询</a></div>
+                <div class="cell"><a href="#">日程管理</a></div>
+                <div class="cell"><a href="#">统计报表</a></div>
+            </div>
+        </div>
+        
+
+        
+        
+
+        <div class="footer">
+            <div id="f-wrapper">
+                <div class="f-div" id="title">
+                    <h2><i class="fa fa-globe"></i>&nbsp;网站导航</h2>
+                </div>
+                <div class="f-div" id="div1">
+                    <p><i class="fa fa-pencil"></i>&nbsp;第一次作业</p>
+                    <p><i class="fa fa-pencil"></i>&nbsp;第二次作业</p>
+                </div>
+                
+                <div class="f-div">
+                    <i class="fa fa-external-link"></i>&nbsp;友情链接 <br><br>
+                    <a href="https://github.com/"><small><i class="fa fa-github"></i>&nbsp;GitHub</small></a> 
+                    <a href="https://stackoverflow.com/"><small><i class="fa fa-stack-overflow"></i>&nbsp;Stack Overflow</small></a>
+                    <a href="https://csdn.net"><small><i class="fa fa-code"></i>&nbsp;CSDN论坛</small></a>
+                </div>
+    
+                <div class="f-div">
+                    <i class="fa fa-wechat"></i> &nbsp;
+                    <i class="fa fa-weibo"></i> &nbsp;
+                    <i class="fa fa-github"></i>  
+                </div>
+    
+                <div id="copyright">版权所有：北京大学软件与微电子学院   Created by：Liu Ru</div>
+            </div>
+                 
+        </div>
+        
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("#more").click(function(){
+                    $(".hid-menu").toggle();
+                    if $("#more").style.display
+                })
+            });
+            
+        </script>
+    </body>
+</html>
