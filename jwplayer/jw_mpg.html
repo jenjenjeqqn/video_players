@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta  charset="utf-8">
+        <title>JW player 7.12.5</title>
+        <link rel="stylesheet" type="text/css" href="jwstyle.css">
+        <script type="text/javascript" src="jw/jwplayer.js"></script>
+        <script type="text/javascript" src="jw/provider.html5.js"></script>
+        <script type="text/javascript" src="jw/jwpsrv.js"></script>
+        <script type="text/javascript" src="jw/jwplayer.controls.js"></script>
+        <script type="text/javascript" src="jw/vttparser.js"></script>
+        <script type="text/javascript" src="jw/related.js"></script>
+        <script type="text/javascript" src="jw/provider.flash.js"></script>
+        <script type="text/javascript" src="jw/polyfills.vttrenderer.js"></script>
+        <script type="text/javascript" src="jw/jquery-1.4.min.js"></script>
+        
+        <script>jwplayer.key="4sNBpozdkb2Gv+IYeWyd+CID9tW2NXdJE5GeSg==";</script>    
+    </head>
+    
+    <body>
+        <h1 style="letter-spacing: 1; font-size: 40; font-weight: bold; color: black; text-align: center">JW Player for MPG</h1>
+        <div class="bigbtn">
+            <a href="jw_mp4.html" class="button">JW PLAYER for MP4</a> <br> <br>
+            <a href="jw_flv.html" class="button">JW PLAYER for FLV</a> <br> <br>
+            <a href="jw_mpg.html" class="button">JW PLAYER for MPG</a> <br> <br>
+            <a href="jw_wmv.html" class="button" id="mm">JW PLAYER for WMV</a> <br><br>
+            <a href="../index.html" class="button">HOMEPAGE</a> <br>
+        </div>
+        <div id="container">
+            <div id="jwp">Let's see whether this works...</div>
+        </div>    <br>
+        <script type="text/javascript">
+            jwplayer("jwp").setup({
+                playlist:[{
+                    file: "../videos/debate.mpg",
+                    type: "mpg",
+                    tracks:[{
+                        file:"subtitles.vtt",
+                        kind:"captions",
+                        "default": true
+                    }]                    
+                }],
+                height: 450,
+                width: 750,
+                autostart: false,
+            });
+            
+            jwplayer('jwp').setCurrentCaptions(1);            
+        </script>
+        
+        
+        <div class="btns">
+            <b>简单播放次数限制：<input type="text" id="slimit" value="2">&nbsp; 已简单播放<span id="stimes"></span>&nbsp;次</b><br>
+            <b>完整播放次数限制：<input type="text" id="climit">&nbsp; 已完整播放<span id="playtimes"></span>&nbsp;次</b><br>
+            
+            <button id='play'>播放</button> &nbsp; <button id='pause'>暂停</button> <br><br>
+            
+            当前位置： <span id="pos"></span> <br>
+            总时长： <span id="dura"></span> <br>            
+            进度条：<progress value="0" max="0" id="pro"></progress><br>
+            音量调节：<input type="range" min="1" max="100" defaultValue="50" onchange="setvolume()" id="ran"> <br>
+            速度调节：
+            <select onchange='speedchange()' id='myselect'>
+                <option value='1'>正常速度</option>
+                <option value='0.5'>稍慢速度</option>
+                <option value='1.5'>稍快速度</option>
+                <option value='3'>快速</option>
+            </select> <br>
+            
+            
+            <button onclick="ctrl()">显示/隐藏控制条</button> <br>
+            <button id="VorA">显示/隐藏画面</button> <br>
+            <button onclick="cap()">显示/隐藏字幕</button><br>
+            
+            <button onclick=command()>从指定位置开始播放指定时长</button>
+            指定位置：<input type="text" id="zd1">
+            指定时长：<input type="text" id="zd2"> 
+            
+            <br><br><br><br>
+            <button onclick="warn()" id="next" type="button">进入下一页</button> <br>
+        </div>
+        
+        
+        <script type="text/javascript">
+            var mydiv = document.getElementById('jwp'),
+                stimes = document.getElementById('stimes'),
+                playtimes = document.getElementById('playtimes'),
+                x=0,
+                y=0,
+                slimit=document.getElementById('slimit'),
+                climit=document.getElementById('climit'),
+                play=document.getElementById('play'),
+                next=document.getElementById('next'),
+                zd1 = document.getElementById("zd1"),
+                zd2 = document.getElementById("zd2"),
+                container = document.getElementById('container');
+            
+            
+                
+            function ctrl(){
+                if (jwplayer("jwp").getControls()==true){
+                    jwplayer("jwp").setControls()=false;
+                }else{
+                    jwplayer("jwp").setControls()=true;
+                }
+            }
+            
+            play.onclick = function(){
+                jwplayer("jwp").play();                
+            }
+            
+            jwplayer('jwp').on('play',function(e){
+                if ( jwplayer('jwp').getPosition()== 0){
+                    y++;
+                };
+                stimes.innerHTML = y;
+                if (y>slimit.value){
+                    y=y-1;
+                    jwplayer("jwp").stop(); 
+                    alert("抱歉，您观看此视频的次数已达到上限！"); 
+                }
+            })
+            
+            pause.onclick = function(){
+                jwplayer("jwp").pause();  
+            }
+            
+            function speedchange(){
+                var sc=document.getElementById('myselect');
+                var speed=sc.options[sc.selectedIndex].value;
+                jwplayer('jwp').setPlaybackRate(Number(speed));
+            }
+            
+            function setvolume(){
+                var ran=document.getElementById('ran');
+                jwplayer('jwp').getMute()=false;
+                jwplayer('jwp').setVolume(ran.value);
+            }
+            
+            
+            
+            //display duration, current position
+                        
+            function ShowTimes(){
+                var pos = document.getElementById('pos'),
+                    dura=document.getElementById('dura');
+                pos.innerHTML = jwplayer('jwp').getPosition();
+                dura.innerHTML = jwplayer('jwp').getDuration();
+                pro.value = jwplayer('jwp').getPosition();
+                pro.max = jwplayer('jwp').getDuration();
+            };
+    
+            self.setInterval("ShowTimes()",50)
+            
+                    
+            // display played times
+            jwplayer('jwp').on('complete',function(e){
+                x++;
+                playtimes.innerHTML=x;                
+            })
+            
+            
+            function cap(){
+                if (jwplayer('jwp').getCurrentCaptions() == 1){
+                    jwplayer('jwp').setCurrentCaptions(0);
+                }else{
+                    jwplayer('jwp').setCurrentCaptions(1);
+                }
+            }
+            
+            function VorA(){
+                if (container.style.display=="block"){
+                    container.style.display = "block";
+                }else{
+                    container.style.display = "none";                  
+                }
+            }
+                    
+            
+            
+            
+            function command(){
+                if (Number(zd1.value) >= jwplayer('jwp').getDuration()){
+                    alert('Your request may not be answered, as the number u put in is larger than the length of this video.')
+                }else if(zd1.value ==""){
+                    jwplayer('jwp').seek(0);
+                }else{
+                    jwplayer('jwp').seek(parseFloat(zd1.value));                    
+                };
+                jwplayer('jwp').play();
+                
+                jwplayer('jwp').on('time',function(e){
+                    var currentTime = jwplayer('jwp').getPosition();
+                    if (currentTime >= parseFloat(zd1.value)+parseFloat(zd2.value)){
+                        jwplayer('jwp').stop();
+                    };
+                })                
+            }
+                
+            
+            
+            
+            // only if the video has been played for certain times will the page go to the next.
+            function warn(){
+                if(x<climit.value){
+                    alert("请至少观看此视频2次！");                    
+                }else{
+                    window.location.href='jw_flv.html';
+                }
+            }
+            
+            
+            
+        </script>        
+    </body>
+</html>
+
+

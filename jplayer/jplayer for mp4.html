@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>jplayer播放器测试</title>
+  <link rel="stylesheet" type="text/css" href="jplayer.css">
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <link type="text/css" href="skin\pink.flag\css\jplayer.pink.flag.css" rel="stylesheet" />
+  <script type="text/javascript" src="jquery.min.js"></script>
+  <script type="text/javascript" src="jquery.jplayer.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $("#jquery_jplayer_1").jPlayer({
+        ready: function () {
+          $(this).jPlayer("setMedia", {
+            title: "Big Buck Bunny Trailer",
+            m4v: "../videos/BBC.mp4",
+            ogv: "http://www.jplayer.org/video/ogv/Big_Buck_Bunny_Trailer.ogv",
+            poster: "http://www.jplayer.org/video/poster/Big_Buck_Bunny_Trailer_480x270.png"
+          });
+        },
+        cssSelectorAncestor: "#jp_container_1",
+        swfPath: "jquery.jplayer.swf",
+        supplied: "m4v, ogv",
+        useStateClassSkin: true,
+        autoBlur: false,
+        smoothPlayBar: true,
+        keyEnabled: true,
+        remainingDuration: true,
+        toggleDuration: true
+      });
+    });
+      
+  </script>
+</head>
+<body>
+    <h1 style="letter-spacing: 1; font-size: 40; font-weight: bold; color: black; text-align: center">Jplayer for MP4</h1>
+<div class="bigbtn">
+    <a href="jplayer%20for%20mp4.html" class="button">Jplayer for MP4</a> <br> <br>
+    <a href="jplayer%20for%20flv.html" class="button">Jplayer for FLV</a> <br> <br>
+    <a href="jplayer%20for%20mpg.html" class="button">Jplayer for MPG</a> <br> <br>
+    <a href="jplayer%20for%20wmv.html" class="button" id="mm">Jplayer for WMV</a> <br> <br>
+    <a href="../index.html" class="button">HOMEPAGE</a> <br>
+</div>
+    
+<div id="jp_container_1" class="jp-video " role="application" aria-label="media player">
+  <div class="jp-type-single" id=play>
+    <div id="jquery_jplayer_1" class="jp-jplayer"></div>
+      <div class="jp-gui" id=kongzhi>
+      <div class="jp-video-play">
+        <button class="jp-video-play-icon" role="button" tabindex="0">play</button>
+      </div>
+      <div class="jp-interface">
+        <div class="jp-progress">
+          <div class="jp-seek-bar">
+            <div class="jp-play-bar"></div>
+          </div>
+        </div>
+        <div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
+        <div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
+        <div class="jp-details">
+          <div class="jp-title" aria-label="title">&nbsp;</div>
+        </div>
+        <div class="jp-controls-holder">
+          <div class="jp-volume-controls">
+            <button class="jp-mute" role="button" tabindex="0">mute</button>
+            <button class="jp-volume-max" role="button" tabindex="0">max volume</button>
+            <div class="jp-volume-bar">
+              <div class="jp-volume-bar-value"></div>
+            </div>
+          </div>
+          <div class="jp-controls">
+            <button class="jp-play" role="button" tabindex="0">play</button>
+            <button class="jp-stop" role="button" tabindex="0">stop</button>
+          </div>
+          <div class="jp-toggles">
+            <button class="jp-repeat" role="button" tabindex="0">repeat</button>
+            <button class="jp-full-screen" role="button" tabindex="0">full screen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+     <div class ="ctrls">
+         <b>简单播放次数限制：<input type="text" id="xz" value="2">&nbsp; 已简单播放 <span id="wcishu"> </span>&nbsp;次</b> <br>
+         <b>完整播放次数限制：<input type="text" id="climit" value="2">&nbsp; 已完整播放 <span id="wwanzheng">0</span>&nbsp;次 </b> <br>
+         <button id="bofang">播放</button>&nbsp;
+         <button id="zanting">暂停</button><br>&nbsp;
+          <p id="wcurrent">当前位置：</p>
+          <p id="wshichang">总时长：</p>
+          <div id="jindutiao">进度条：</div><div id="prodiv"><progress value="0" max="0" id="pro"></progress></div>&nbsp;   
+         <div id="yinliang">音量调节:</div><input type="range" id="yinliangtiao" min="0" max="10"><span id="wyinliang"></span><br> 
+         <div id="biansu">速度调节：</div>
+         <select id="sulv">
+                <option value="1">正常速度</option>
+                <option value="0.5">稍慢速度</option>
+                <option value='1.5'>稍快速度</option>
+                <option value="2">快速</option>
+         </select><br>
+         <br> 
+         <button id="kongzhitiao">显示/隐藏控制条</button><br>
+         <button id="huamian">显示/隐藏画面</button><br>
+         <button id="zhiding">从指定位置开始播放指定时长</button>
+            <p>指定位置：<input type="text" id="zd1"></p> 
+            <p>指定时长：<input type="text" id="zd2"></p><br>
+         <br><br><br><br>
+         <button id="next" type="button">进入下一页</button><br>
+     </div>   
+    
+     <script type="text/javascript">
+         //播放
+         var cs = 0;
+         $("#bofang").click( function() {
+              $("#jquery_jplayer_1").jPlayer("play");
+            });
+        
+         
+         //播放次数
+         $("#jquery_jplayer_1").bind($.jPlayer.event.playing, function(event) {
+                if (Math.floor(event.jPlayer.status.currentTime)==0){
+                   cs=cs+1;
+                };
+           });
+         
+         //暂停
+         $("#zanting").click( function() {
+           $("#jquery_jplayer_1").jPlayer("pause");
+         });
+          
+         //播放速度
+         $("#sulv").click( function() {
+           $("#jquery_jplayer_1").jPlayer("playbackRate",sulv.value);
+         });
+         
+         //音量控制
+         $("#yinliangtiao").change( function() {
+           $("#jquery_jplayer_1").jPlayer("volume", yinliangtiao.value/10);
+             $("#wyinliang").text(yinliangtiao.value);
+         });
+         
+         //显示当前音量
+         $("#yinliang").click( function() {
+                alert("当前音量为：" + String(yinliangtiao.value));
+         });
+         
+          //当前位置
+         $("#jquery_jplayer_1").bind($.jPlayer.event.timeupdate, function(event) { 
+            $("#wcurrent").text("当前位置："+event.jPlayer.status.currentTime);
+             $("#pro").val(Math.floor(event.jPlayer.status.currentTime));
+           });
+         
+
+          //总时长
+         $("#jquery_jplayer_1").bind($.jPlayer.event.playing, function(event) { 
+            $("#wshichang").text("总时长："+event.jPlayer.status.duration);
+             $("#pro").attr("max",Math.floor(event.jPlayer.status.duration));
+           });
+         
+         
+         //显示播放次数
+         $("#jquery_jplayer_1").bind($.jPlayer.event.timeupdate, function(event) { 
+           $("#wcishu").text(cs);
+           });
+         
+        //限制简单播放次数
+         $("#jquery_jplayer_1").bind($.jPlayer.event.ended, function(event) { 
+             if (cs >= xz.value){
+                   $("#bofang").attr("disabled", true);
+                    }else{
+                    $("#bofang").attr("disabled", false);
+                    };   
+           });
+        
+        
+          //隐藏与隐藏画面
+         $("#huamian").click( function() {
+                    $("#jp_video_0").toggle();
+         });
+         
+        
+         //显示与隐藏控制条
+         $("#kongzhitiao").click( function() {
+                    $("#kongzhi").toggle();
+         });
+         
+         //显示隐藏字幕
+         $("#zimu").click( function() {
+                    if ($("#jp_video_0").textTracks[0].mode == "showing"){
+                    $("#jp_video_0").textTracks[0].mode = "hidden"; 
+                }else{
+                    $("#jp_video_0").textTracks[0].mode = "showing"; 
+                };                
+        });
+          
+        //指定位置播放指定时间
+         $("#zhiding").click( function() {
+            $("#jquery_jplayer_1").jPlayer("play", parseFloat(zd1.value));
+            $("#jquery_jplayer_1").bind($.jPlayer.event.timeupdate, function(event) {
+                var current = Math.floor(event.jPlayer.status.currentTime) 
+                if (current ==parseFloat(zd1.value)+parseFloat(zd2.value)){
+                   $("#jquery_jplayer_1").jPlayer("pause");
+                };
+            });
+        });
+        
+        
+         //获取完整播放次数
+         var wzcs = 0;
+         $("#jquery_jplayer_1").bind($.jPlayer.event.ended, function(event) { 
+             wzcs++;
+             $("#wwanzheng").text(wzcs);
+           });
+         
+         
+         
+         //右键菜单隐藏
+         $("#jquery_jplayer_1").contextmenu(function() {
+            return false;
+         });
+         
+         //默认隐藏控制条
+         $(function(){
+               $("#kongzhi").hide();
+         });
+         
+         //加字幕
+         $(function(){
+            $("#jp_video_0").append("<track src='BBC.vtt' kind='caption' srclang='en' label='English' default/>");
+         });
+        
+         //完整播放次数限制
+           $("#next").click( function() {
+                if(wzcs<climit.value){
+                    alert("未达到完整播放次数要求!");                    
+                }
+        })
+    </script>
+    
+</body>
+</html>

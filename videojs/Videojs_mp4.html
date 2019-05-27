@@ -1,0 +1,188 @@
+<html>
+<head>
+    <meta charset="utf-8" http-equiv="Access-Control-Allow-Origin" content="*" />
+    <link rel="stylesheet" type="text/css" href="videojs.css">
+    <link href="http://vjs.zencdn.net/6.6.0/video-js.css" rel="stylesheet">
+    <script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+    <script src="http://vjs.zencdn.net/6.6.0/video.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/videojs-flash@2/dist/videojs-flash.min.js"></script>
+</head>
+
+<body>
+    <h1 style="letter-spacing: 1; font-size: 40; font-weight: bold; color: black; text-align: center">Video.js player for MP4</h1>
+    <video id="myvideo" class="video-js" preload="auto" data-setup="{}" oncontextmenu="return false;">
+        <source src="../videos/BBC.mp4" type='video/mp4'>
+        <track src="subtitles.vtt" kind="captions" srclang="en" label="English" default />
+        <!--vtt字幕都可以啦 -->
+    </video> <br>
+    
+    
+    <div class="bigbtn">
+            <a href="Videojs_mp4.html" class="button">VideoJs for MP4</a> <br> <br>
+            <a href="Videojs_flv.html" class="button">VideoJs for FLV</a> <br> <br>
+            <a href="videojs_mpg.html" class="button">VideoJs for MPG</a> <br> <br>
+            <a href="videojs_wmv.html" class="button" id="mm">VideoJs for WMV</a> <br><br>
+            <a href="../index.html" class="button">HOMEPAGE</a> <br>
+    </div>
+    
+    
+    <div class="btns">
+        <b>简单播放次数限制：<input type="text" id="slimit" value="3">&nbsp; 已简单播放 <span id="al"></span>&nbsp;次</b><br>
+        <b>完整播放次数限制：<input type="text" id="climit" value="2">&nbsp; 已完整播放 <span id="tt"></span>&nbsp;次 </b> <br>
+        
+        <button id='playbtn'>播放</button> &nbsp; <button onclick="video.pause()">暂停</button> <br> <br>
+        
+        当前位置： <span id="pos"></span> <br>
+        总时长： <span id="dura"></span> <br>        
+        进度条：<progress value="0" max="0" id="pro"></progress><br>
+        音量调节：<input type="range" min="1" max="100" defaultValue="50" onchange="setvolume()" id="ran"> <br>
+        速度调节：
+        <select onchange='speedchange()' id='myselect'>
+                <option value='1'>正常速度</option>
+                <option value='0.5'>稍慢速度</option>
+                <option value='1.5'>稍快速度</option>
+                <option value='3'>快速</option>
+        </select> <br>
+            
+            
+        <button onclick="ctrl()">显示/隐藏控制条</button> <br>
+        <button onclick="VorA()">显示/隐藏画面</button> <br>
+        <button onclick="cap()">显示/隐藏字幕</button><br>
+        
+        
+        <button onclick="command()">从指定位置开始播放指定时长</button>
+            指定位置：<input type="text" id="zd1">&nbsp;
+            指定时长：<input type="text" id="zd2">
+            
+            <br><br><br><br>
+        <button onclick="warn()" id="next" type="button">进入下一页</button> <br>
+    </div>
+    
+    
+    <script type="text/javascript">
+        var video=document.getElementById("myvideo"),
+            playbtn = document.getElementById('playbtn'),
+            pro=document.getElementById("pro"),
+            ran=document.getElementById("ran"),
+            slimit = document.getElementById('slimit'),
+            climit = document.getElementById('climit'),
+            al=document.getElementById('al'),
+            y=0,
+            tt = document.getElementById('tt'),
+            x=0,
+            pos = document.getElementById("pos"),
+            dura = document.getElementById("dura"),
+            zd1 = document.getElementById("zd1"),
+            zd2 = document.getElementById("zd2");
+        
+        
+        
+        //----播放，设置简单（最多）播放限制，已播放次数
+        playbtn.onclick = function(){
+            video.play();  
+            if (video.currentTime == 0){                
+                    y++;
+                    al.innerHTML = y;
+                if (y > slimit.value){
+                    y=y-1;
+                    video.pause();
+                    alert("Sorry, but you have no more chances to watch the video again!"); 
+                }
+            }
+        }
+        
+        
+        
+        // 完成播放次数限制，进度条，当前位置，总时长，音量，速度
+        video.addEventListener("timeupdate", jianting1);
+        
+        function jianting1(){
+            if (video.ended){
+                x++;
+                tt.innerHTML=x;
+                video.currentTime = 0;
+            };  
+                        
+            pro.value = video.currentTime;
+            pro.max = video.duration;
+            pos.innerHTML = video.currentTime;
+            dura.innerHTML = video.duration;
+        }
+         
+                
+        function setvolume(){
+            video.volume=ran.value/100;
+            video.muted=false;
+        }
+        function speedchange(){
+            var sc=document.getElementById('myselect');
+            var speed=sc.options[sc.selectedIndex].value;
+            video.playbackRate=speed;
+        }
+        
+            
+        function ctrl(){
+            if(video.controls == true){
+                video.controls = false;
+            }else{
+                video.controls = true;
+            };
+        }
+            
+        //显示隐藏字幕
+        function cap(){
+            //if (video.textTrack[] == 1){
+             //   video.textTrack[] = 0;
+            //}else{
+              //  video.textTrack[] = 1;
+            //}
+        }
+        
+
+            
+        //显示隐藏画面
+        function VorA(){
+            if (video.style.display == "block"){
+                video.style.display = "none";
+            }else{
+               video.style.display = "block";
+            };
+        }
+        
+        
+        
+        //从指定位置，播放指定时长
+        function command(){
+                if (zd1.value ==""){
+                    video.currentTime = 0;
+                }else{
+                    video.currentTime = zd1.value;
+                    video.addEventListener("timeupdate", specific);
+                };    
+            video.play()
+        }
+        
+        function specific(){
+            var currentTime = Math.floor(video.currentTime);
+            if (currentTime == parseFloat(zd1.value)+parseFloat(zd2.value)){
+                //video.currentTime = zd1.value;
+                video.pause();
+            }
+        }
+        
+        
+        //若设定了至少完整播放的次数，且未达到最少完整播放的次数，则不能进入下一页
+        function warn(){
+            if(x<climit.value){
+                alert("Please watch this video for at least " + climit.value + " times !");                    
+            }else{
+                window.location.href='Videojs_flv.html';
+            }
+        }
+    
+    </script>
+    
+    <!-- 自定义按钮实现：播放、暂停、变速、进度条，当前位置，播放次数，完整播放次数，播放次数限制，字幕显示与隐藏，画面显示与隐藏，从指定位置开始播放指定时长；兼容性测试 -->
+    
+</body>
+</html>

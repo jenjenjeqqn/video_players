@@ -1,0 +1,48 @@
+body{
+    font-size: large;
+    background: #616161;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #9bc5c3, #616161);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #9bc5c3, #616161); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+#bofangqi{
+    margin-top: 1.6%;
+    margin-left: 22.4%;
+    display: block; 
+    width: 800; 
+    height: 550;
+}
+.btns{
+    display: block;
+    width:800;
+    height: 500;
+    margin-left: 21.5%;
+    line-height: 30px;
+    text-align: left;
+}
+button{
+    font-size: medium;
+    border-style:solid;
+    border-radius: 0.2em;
+    background-image: linear-gradient(to top, #c1dfc4 0%, #deecdd 100%);
+}
+#next{
+    margin-left: 33%;
+}
+.bigbtn{    
+  display: block;
+  position: absolute;
+  top: 10%;
+  left: 2%;
+}
+.bigbtn a{
+    display: inline-block;
+    width:176px;
+    padding: 0.75em 1.2em;
+    text-decoration: none;
+    color: black;
+    border-style: outset;
+    border-radius: 0.3em;
+    background-color:antiquewhite;
+}
+
+

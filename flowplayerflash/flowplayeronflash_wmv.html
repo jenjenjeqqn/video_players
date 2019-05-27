@@ -1,0 +1,237 @@
+<!DOCTYPR html>
+<html lang ="en">
+    
+    
+    <head>
+        <meta charset="utf-8">
+        <title>Flowplayer on flash</title>
+            <script type="text/javascript" src="flowplayer-3.2.13.min.js"></script>
+            <script>
+                flowplayer.conf = {
+                ratio: 9/16,
+                splash: true,
+                analytics: "UA-27182341-1"
+                };
+            </script>
+            <link rel="stylesheet" type="text/css" href="style.css">
+            <link rel="stylesheet" href="flashuniform.css">
+    </head>   
+    
+    <body>
+        <h1 style="letter-spacing: 1; font-size: 40; font-weight: bold; color: black; text-align: center">Flash Player for WMV</h1>
+        <div class="bigbtn">
+            <a href="flowplayeronflash_mp4.html" class="button">Flash Player for MP4</a> <br> <br>
+            <a href="flowplayeronflash_flv.html" class="button">Flash Player for FLV</a> <br> <br>
+            <a href="flowplayeronflash_mpg.html" class="button">Flash Player for MPG</a> <br> <br>
+            <a href="flowplayeronflash_wmv.html" class="button">Flash Player for WMV</a> <br> <br>
+            <a href="../index.html" class="button">HOMEPAGE</a> <br>
+        </div>
+        
+        <div id="bofangqi">
+        <a 
+              href="../videos/ABC.wmv"  
+              style="display:block;width:800px;height:550px;"
+              id="player">
+        </a>
+        </div>
+        <br>
+        
+        <div class="btns">
+        <div class ="ctrls">
+        <span id="xianzhi">简单播放次数限制：</span><input type="text" id="xz" value="2"><span id="cishu"></span>&nbsp;已简单播放 <span id="wcishu">0</span> 次<br>
+        <span id="wanzhengxianzhi">完整播放次数限制：</span><input type="text" id="nextxz" value="2"><span id="wanzheng"></span>&nbsp;已完整播放 <span id="wwanzheng">0</span> 次<br>
+        <button id="bofang">播放</button>
+        <button id="zanting">暂停</button><br>
+        <span id="current">当前位置：</span><span id="wcurrent"></span><br>
+        <span id="shichang">总时长：</span><span id="wshichang"></span><br>
+        <span id="jindutiao">进度条：</span><div id="prodiv"><progress value="0" max="0" id="pro"></progress></div><br>
+        <span id="yinliang">音量调节：</span><br>
+        <input type="range" id="yinliangtiao" min="0" max="100"><span id="wyinliang"></span><br> 
+        <button id="kongzhitiao">显示/隐藏控制条</button><br>
+        <button id="huamian">显示/隐藏画面</button><br>
+        <button id="zimu">显示/隐藏字幕</button><br>
+        <button id="zhiding">从指定位置开始播放指定时长</button>
+            <p>指定位置：<input type="text" id="zd1"></p> 
+            <p>指定时长：<input type="text" id="zd2"></p><br> 
+        <button id="next">下一页</button>
+        </div>     
+        </div>
+        
+        <script type="text/javascript">
+            
+            var bofang = document.getElementById("bofang");
+            var zanting = document.getElementById("zanting");
+            var yinliang = document.getElementById("yinliang");
+            var wyinliang = document.getElementById("wyinliang");
+            var yinliangtiao = document.getElementById("yinliangtiao");
+            var current = document.getElementById("current");
+            var wcurrent = document.getElementById("wcurrent");
+            var shichang = document.getElementById("shichang");
+            var wshichang = document.getElementById("wshichang");  
+            var zimu = document.getElementById("zimu");
+            var huamian = document.getElementById("huamian");
+            var yinliangtiao = document.getElementById("yinliangtiao");
+            var kongzhitiao = document.getElementById("kongzhitiao")
+            var zhiding =document.getElementById("zhiding");
+            var zd1 = document.getElementById("zd1");
+            var zd2 = document.getElementById("zd2");
+            var cishu = document.getElementById("cishu");
+            var wcishu = document.getElementById("wcishu");
+            var cs = 0;
+            var xianzhi = document.getElementById("xianzhi");
+            var xz = document.getElementById("xz");
+            var wanzheng = document.getElementById("wanzheng");
+            var wwanzheng = document.getElementById("wwanzheng");
+            var wz = 0;
+            var nextxz = document.getElementById("nextxz");
+            var next = document.getElementById("next");
+            var pd = 0;
+            
+            $f.addPlugin("captions", function(captions) {
+                var cuepoints = [];
+                for (time in captions) {
+                    cuepoints.push(parseInt(time));
+                } 
+                var content = this.getPlugin("content");
+                if (content) {
+                    this.onCuepoint(cuepoints, function(clip, time) {
+                        content.setHtml(captions[time]);
+                    });
+                }
+                return this;
+            });
+        
+		        var player = flowplayer("player", "flowplayer-3.2.18.swf", {
+                    
+                clip: {        
+                    autoPlay: false,
+                    duration: 20,
+                    autoButtering: true,
+                    onStart: function(clip) {
+                        wyinliang.innerHTML = player.getVolume();
+                        cs++;
+                        wcishu.innerHTML = cs;
+                        wwanzheng.innerHTML = wz;
+                        pd = 1;
+                    },
+                    //限制播放次数
+                    onBeforeBegin: function(clip) {
+                        
+                        if (cs == xz.value) {
+                            alert("已达到限制播放次数！");
+                            return false;    
+                        };
+                    },
+                    //检测是否完整播放与次数
+                    onFinish: function(clip) {
+                        if (pd == 1){
+                            wz++;
+                            wwanzheng.innerHTML = wz;
+                            pd = 0;
+                        };
+                    }
+                },
+                    
+                plugins: {
+                    controls: {
+                        url: "flowplayer.controls-3.2.16.swf",
+                    autoHide: "never"
+                    }
+                },
+                
+                plugins: {
+                    content: {
+                        bottom: 40,
+                        backgroundColor: "transparent",
+                        backgroundGradient: 'none',
+                        borderWidth: 0,
+                        border: "none",
+                        width: '80%',
+                        url: 'flowplayer.content-3.2.9.swf',
+                        style: {body: {fontSize:26, color: '#ffffff', textAlign: "center"}, a: {color:'#f9ff00'}}
+                    }
+                }
+                }).captions({
+                    1000: 'During his five years as Chinese president',
+                    3000: 'We are in New York City',
+                    6000: 'We are actually at the Lucern Hotel, just down the street',
+                    9000: 'Astrophysicist, Director of the Hayden Planetarium',
+                    13000: 'from the American Museum of Natural History',
+                    18000: 'And with me is Neil deGrasse Tyson'
+                }).onError(function(){
+                    alert("Flash Player 不支持 wmv 视频格式！");
+                });
+            
+            //监听1-进度条
+            function jianting1(){
+                pro.value = player.getTime();
+                pro.max = player.getClip(0).duration;
+            };
+            self.setInterval("jianting1()", 50);
+            
+            //播放
+            bofang.onclick = function() {
+                player.toggle();	        					
+	        };
+            
+            //暂停
+            zanting.onclick = function() {
+		        player.pause();
+	        };
+            
+            //音量
+            yinliangtiao.defaultvalue = player.getVolume();
+            yinliangtiao.onchange = function(){
+                player.setVolume(yinliangtiao.value);
+                wyinliang.innerHTML = player.getVolume();
+            };
+            
+            //显示当前位置与总时长
+            function GetCurPossition() {
+                wcurrent.innerHTML = player.getTime(); 
+                wshichang.innerHTML = player.getClip(0).duration;
+            };
+            self.setInterval("GetCurPossition()", 100);
+            
+            //显示隐藏画面
+            huamian.onclick = function(){
+                if (player.isHidden() == true){
+                    player.show();
+            }else{
+                player.hide();
+                  };
+            };
+            
+            //显示隐藏控制条
+            kongzhitiao.onclick = function(){
+                $f().getPlugin("controls").toggle();
+            };
+            
+            //指定位置播放指定时间
+            zhiding.onclick = function(){
+                player.seek(zd1.value);
+                player.unload();
+                $f().getClip(0).update({
+                    duration: Number(zd2.value) + Number(zd1.value)
+                });
+                player.load();
+            };
+            
+            //显示隐藏字幕
+            zimu.onclick = function(){
+                $f().getPlugin("content").toggle();          
+            };
+            
+            //满足完整播放次数到下一页判断
+            next.onclick = function(){
+                if (wz < nextxz.value){
+                    alert("未达到完整播放限制次数！");
+                }else{
+                    window.location.href = "http://www.baidu.com";
+                };
+            };
+        </script>
+
+        
+    </body>  
+</html>

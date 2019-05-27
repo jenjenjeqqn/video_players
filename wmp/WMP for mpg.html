@@ -1,0 +1,223 @@
+<!DOCTYPR html>
+<html lang ="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Windows Media Player播放器测试</title>
+        <link rel="stylesheet" type="text/css" href="wmp.css">
+    </head>
+    <body>
+      <h1 style="letter-spacing: 1; font-size: 40; font-weight: bold; color: black; text-align: center">Windows Media Player for MPG</h1>
+      <div class="bigbtn">
+            <a href="WMP%20for%20mp4.html" class="button">Windows Media Player for MP4</a> <br> <br>
+            <a href="WMP%20for%20flv.html" class="button">Windows Media Player for FLV</a> <br> <br>
+            <a href="WMP%20for%20mpg.html" class="button">Windows Media Player for MPG</a> <br> <br>
+            <a href="WMP%20for%20wmv.html" class="button" id="mm">Windows Media Player for WMV</a> <br> <br>
+            <a href="../index.html" class="button">HOMEPAGE</a> <br>
+        </div>
+      
+      <OBJECT id="Player"
+        CLASSID="CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6">
+         <param name="uiMode" value="none" >
+      </OBJECT><br>
+      <div id="captions"></div> 
+    
+      <div class="btns">
+         <b>简单播放次数限制：<input type="text" id="xz" value="2">&nbsp; 已简单播放 <span id="wcishu"> </span>&nbsp;次</b> <br>
+         <b>完整播放次数限制：<input type="text" id="climit" value="2">&nbsp; 已完整播放 <span id="wwanzheng">0</span>&nbsp;次 </b> <br>
+         <button id="bofang">播放</button>&nbsp;
+         <button onclick="PausePlayer()">暂停</button><br>&nbsp;
+         <div>当前位置:<span id="wcurrent"></span></div>
+         <div>总时长：<span id="wshichang"></span></div>
+         <div id="jindutiao">进度条：</div><div id="prodiv"><progress value="0" max="0" id="pro"></progress></div>&nbsp;
+         <div id="yinliang">音量调节:</div><input type="range" id="yinliangtiao" min="0" max="10"><span id="wyinliang"></span><br>
+         <div>速度调节：</div><select onchange="SetRate()" id="sulv">
+                <option value="1">正常速度</option>
+                <option value="0.5">稍慢速度</option>
+                <option value='1.5'>稍快速度</option>
+                <option value="2">快速</option>
+         </select><br>
+         <br>
+         <button onclick="Control()">显示/隐藏控制条</button><br>
+         <button onclick="Screen()">显示/隐藏画面</button><br>
+         <button id="zimu">显示/隐藏字幕</button><br>     
+         <button id="zhiding">从指定位置开始播放指定时长</button>
+            <p>指定位置：<input type="text" id="zd1"></p> 
+            <p>指定时长：<input type="text" id="zd2"></p><br>     
+         <br><br><br><br>
+        <button onclick="warn()" id="next" type="button">进入下一页</button> <br>
+    </div>
+   <SCRIPT>
+      var myVid=document.getElementById("Player");
+      var demo=document.getElementById("demo");
+      var bofang=document.getElementById("bofang");
+      var wcurrent = document.getElementById("wcurrent");
+      var zhiding =document.getElementById("zhiding");
+      var zd1 = document.getElementById("zd1");
+      var zd2 = document.getElementById("zd2");
+      var yinliang = document.getElementById("yinliang");
+      var wyinliang = document.getElementById("wyinliang");
+      var yinliangtiao = document.getElementById("yinliangtiao");
+      var wshichang = document.getElementById("wshichang");
+      var kongzhitiao = document.getElementById("kongzhitiao");
+      var cishu = document.getElementById("cishu");
+      var wcishu = document.getElementById("wcishu");
+      var xz = document.getElementById("xz");
+      var wwanzheng = document.getElementById("wwanzheng");
+      var zimu = document.getElementById("zimu");
+      var captions = document.getElementById("captions");
+      var pro = document.getElementById("pro");
+      var prodiv = document.getElementById("prodiv");
+       
+      Player.settings.autoStart=false;
+      Player.URL = "../videos/debate.mpg";
+      Player.enableContextMenu=false;  
+      Player.windowlessVideo=true;
+      
+    //播放
+            var cs=0;
+            bofang.onclick = function(){
+                 if(Player.controls.currentPosition==0){
+                    cs++; 
+                };
+                 Player.controls.play();
+            };
+       
+     
+    
+    //暂停
+     function PausePlayer () {
+         Player.controls.pause();
+       }
+       
+     
+    //显示播放次数
+     function ShowTimes(){
+                wcishu.innerHTML = cs;
+            };
+    
+     self.setInterval("ShowTimes()",50)    
+       
+       
+    //限制播放次数；记录完整播放次数
+    var wzcs = 0;
+    function jianting2(){
+            if (xz.value <= cs){
+                    bofang.disabled = true; 
+                    }else{
+                    bofang.disabled = false;
+                    };
+             wzcs++;
+             wwanzheng.innerHTML = wzcs;
+            };
+       
+         
+    //画面显示与隐藏
+     function Screen() {  
+         if (Player.uiMode == "invisible"){
+              Player.uiMode = "none";     
+            }else{
+                Player.uiMode = "invisible";
+                  };
+    } 
+    
+    //控制条显示与隐藏
+     function Control() {  
+         if (Player.uiMode == "none"){
+              Player.uiMode = "full";     
+            }else{
+                Player.uiMode = "none";
+                  };
+     } 
+       
+       
+    //显示隐藏字幕
+      zimu.onclick = function(){
+                if (captions.style.display == "none"){
+                    captions.style.display = "block";
+                }else{
+                    captions.style.display = "none";
+                };
+            };
+      
+    //显示当前位置与总时长
+     function GetCurPossition() {
+         wcurrent.innerHTML = Player.controls.currentPosition; 
+         wshichang.innerHTML = Player.currentMedia.duration;
+         pro.value = Player.controls.currentPosition;
+         pro.max = Player.currentMedia.duration;
+       }
+       
+     self.setInterval("GetCurPossition()",50)    
+
+    //设置播放速度
+    function SetRate(){
+                if (sulv.value ==""){
+                    Player.settings.rate=1; 
+                }else{
+                    Player.settings.rate = sulv.value;
+                };                               
+    };
+       
+       
+     //音量
+      yinliangtiao.defaultvalue = Player.settings.volume;
+      wyinliang.innerHTML = Player.settings.volume/10;
+      yinliangtiao.onchange = function(){
+            Player.settings.volume = yinliangtiao.value*10;
+            wyinliang.innerHTML = Player.settings.volume/10;
+     };
+      
+       
+     
+       
+     //指定位置播放指定时间   
+       function specific(){
+                var current = Math.floor(Player.controls.currentPosition);
+                if (current == parseFloat(zd1.value)+parseFloat(zd2.value)){
+                       Player.controls.pause();
+                };
+            };
+            zhiding.onclick = function(){
+                if (zd1.value ==""){
+                     Player.controls.currentPosition = 0;
+                }else{
+                    Player.controls.currentPosition = zd1.value;
+                    Player.controls.play();
+                    self.setInterval("specific()",50)    
+                };    
+            };
+       
+           
+       // only if the video has been played for certain times will the page go to the next.
+            function warn(){
+                if(wzcs<climit.value){
+                    alert("未达到完整播放次数要求!");                    
+                }else{
+                    window.location.href='http://www.baidu.com';
+                }
+            }
+     </SCRIPT>
+        
+     <SCRIPT LANGUAGE = "JScript"  FOR = Player EVENT = playStateChange(NewState)>
+       var n=0;
+       switch (NewState){
+          case 1:
+             jianting2();
+             break;
+         }
+      </SCRIPT>
+     <SCRIPT for="window" event="onload()">
+       Player.closedCaption.captioningID = "captions";
+       Player.closedCaption.SAMIFileName = "ABC.smi";
+       // The digital media file will open automatically, after which
+       // the OpenStateChange event (handled below) will fire.
+     </SCRIPT>
+
+        
+     <style type="text/css">
+        #captions {
+         color: orangered;
+            font-weight: bold;}
+     </style>
+  </body>
+</html>
